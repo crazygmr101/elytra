@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "elytratilt",
+  "version": "${version}",
+  "name": "Elytratilt",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/elytratilt/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "crazygmr101.elytratilt.client.ElytratiltClient"
+    ],
+    "main": [
+      "crazygmr101.elytratilt.Elytratilt"
+    ]
+  },
+  "mixins": [
+    "elytratilt.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.11.1",
+    "fabric": "*",
+    "minecraft": "1.16.5"
+  },
+  "custom": {
+    "modmenu": {
+      "links": {
+      },
+      "badges": [ "client"]
+    }
+  }
+}
