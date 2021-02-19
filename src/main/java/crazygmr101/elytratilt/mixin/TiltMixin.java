@@ -1,5 +1,6 @@
 package crazygmr101.elytratilt.mixin;
 
+import crazygmr101.elytratilt.Configs;
 import crazygmr101.elytratilt.Smoother;
 import net.fabricmc.loader.util.sat4j.core.Vec;
 import net.minecraft.client.MinecraftClient;
@@ -16,7 +17,6 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 
 @Mixin(GameRenderer.class)
 public class TiltMixin {
-    private Smoother smoother = new Smoother();
 
     @ModifyArg(method = "renderWorld",
             at = @At(value = "INVOKE",
@@ -29,12 +29,16 @@ public class TiltMixin {
         ClientPlayerEntity player = MinecraftClient.getInstance().player;
         if (player == null)
             return matrices;
-        if (!player.isFallFlying() || camera.isThirdPerson()) {
-            smoother.clear();
+        if (camera.isThirdPerson() && ! Configs.third_person_tilt) {
+            Smoother.clear();
             return matrices;
         }
         if (player.isFallFlying()) {
-            matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(smoother.add_yaw(player.yaw)));
+            matrices.multiply(Vector3f.NEGATIVE_Y.getDegreesQuaternion(camera.getYaw() + 180.0F));
+            matrices.multiply(Vector3f.NEGATIVE_X.getDegreesQuaternion(camera.getPitch()));
+            matrices.multiply(Vector3f.POSITIVE_Z.getDegreesQuaternion(Smoother.get_new_yaw()));
+            matrices.multiply(Vector3f.POSITIVE_X.getDegreesQuaternion(camera.getPitch()));
+            matrices.multiply(Vector3f.POSITIVE_Y.getDegreesQuaternion(camera.getYaw() + 180.0F));
         }
         return matrices;
     }
